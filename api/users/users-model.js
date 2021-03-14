@@ -18,6 +18,14 @@ function find() {
       }
     ]
    */
+    return db({ u: "users" })
+      .innerJoin({ r: "roles" }, "r.role_id", "u.user_id")
+      .select(
+        "u.user_id",
+        "u.username",
+        "r.role_name"
+        )
+
 }
 
 function findBy(filter) {
