@@ -55,6 +55,14 @@ function findById(user_id) {
       "role_name": "instructor"
     }
    */
+  return db({u: "users"})
+    .innerJoin({r: "roles"}, "r.role_id", "u.user_id")
+    .where("u.user_id", user_id)
+    .first(
+      "u.user_id",
+      "u.username",
+      "r.role_name"
+    )
 }
 
 /**
