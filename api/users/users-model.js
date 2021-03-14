@@ -42,6 +42,15 @@ function findBy(filter) {
       }
     ]
    */
+  return db({u: "users"})
+    .innerJoin({r: "roles"}, "r.role_id", "u.user_id")
+    .where(filter)
+    .select(
+      "u.user_id",
+      "u.username",
+      "u.password",
+      "r.role_name"
+    )
 }
 
 function findById(user_id) {
