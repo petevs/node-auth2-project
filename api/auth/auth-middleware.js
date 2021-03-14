@@ -42,6 +42,7 @@ const checkUsernameExists = (req, res, next) => {
       "message": "Invalid credentials"
     }
   */
+ next()
 }
 
 
@@ -64,6 +65,7 @@ const validateRoleName = (req, res, next) => {
       "message": "Role name can not be longer than 32 chars"
     }
   */
+ next()
 }
 
 module.exports = {
