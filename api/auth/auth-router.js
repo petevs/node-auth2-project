@@ -3,7 +3,8 @@ const bcrypt = require("bcryptjs")
 const jwt = require('jsonwebtoken')
 const { checkUsernameExists, validateRoleName } = require('./auth-middleware');
 const { JWT_SECRET } = require("../secrets"); // use this secret!
-const { add, findBy } = require('../users/users-model')
+const { add, findBy } = require('../users/users-model');
+const { default: jwtDecode } = require("jwt-decode");
 
 
 router.post("/register", validateRoleName, async (req, res, next) => {
@@ -23,7 +24,7 @@ router.post("/register", validateRoleName, async (req, res, next) => {
     const { username, password } = req.body
     const newUser = await add({
       username,
-      password: await bcrypt.hash(password, 14),
+      password: await bcrypt.hash(password, 3),
       role_name: req.role_name
     })
 
@@ -79,7 +80,7 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
       role_name: user.role_name,
       exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
     }, JWT_SECRET )
-
+    console.log(jwtDecode(token))
     res.cookie("token", token)
 
     res.json({
