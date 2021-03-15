@@ -20,8 +20,8 @@ const restricted = (req, res, next) => {
     Put the decoded token in the req object, to make life easier for middlewares downstream!
   */
   try {
-    const token = req.cookies.token
-
+    // const token = req.cookies.token
+    const token = req.headers.authorization
     if (!token){
       return res.status(401).json({
         message: "Token required"
@@ -113,18 +113,19 @@ const validateRoleName = async (req, res, next) => {
  
  try{
    
-   if(!req.body.role_name){
+   if(!req.body.role_name || req.body.role_name.trim() === ''){
      req.role_name = 'student'
      return next()
    }
 
-  if(req.body.role_name === 'admin'){
+
+  if(req.body.role_name.trim() === 'admin'){
     return res.status(422).json({
       message: 'Role name can not be admin'
     })
   }
 
-  if(req.body.role_name.length > 32){
+  if(req.body.role_name.trim().length > 32){
     return res.status(422).json({
       message: "Role name can not be longer than 32 chars"
     })

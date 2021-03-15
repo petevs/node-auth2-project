@@ -80,10 +80,9 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
       role_name: user.role_name,
       exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
     }, JWT_SECRET )
-    console.log(jwtDecode(token))
     res.cookie("token", token)
 
-    res.json({
+    res.status(200).json({
       message: `${user.username} is back`,
       token: token
     })
