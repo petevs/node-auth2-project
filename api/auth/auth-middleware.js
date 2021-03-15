@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const { find } = require('../users/users-model')
 
 
-const restricted = (req, res, next) => {
+const restricted = async (req, res, next) => {
   /*
     If the user does not provide a token in the Authorization header:
     status 401
@@ -56,13 +56,18 @@ const only = role_name => (req, res, next) => {
 
     Pull the decoded token from the req object, to avoid verifying it again!
   */
- 
- if(role_name !== req.token.role_name){
-  return res.status(403).json({
-    message: "This is not for you"
-  })
+ try {
+   const decodedToken = req.token
+   
+   if(role_name !== decodedToken.role_name){
+    return res.status(403).json({
+      message: "This is not for you"
+    })
+   }
+   next()
+ } catch(err){
+   next(err)
  }
- next()
 }
 
 

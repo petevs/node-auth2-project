@@ -83,7 +83,7 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
     res.cookie("token", token)
 
     res.status(200).json({
-      message: `${user.username} is back`,
+      message: `${user.username} is back!`,
       token: token
     })
 
