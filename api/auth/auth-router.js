@@ -18,12 +18,13 @@ router.post("/register", validateRoleName, async (req, res, next) => {
       "role_name": "angel"
     }
    */
+
   try {
-    const { username, password, role_name } = req.body
+    const { username, password } = req.body
     const newUser = await add({
       username,
       password: await bcrypt.hash(password, 14),
-      role_name
+      role_name: req.role_name
     })
 
     res.status(201).json(newUser)
@@ -73,15 +74,16 @@ router.post("/login", checkUsernameExists, async (req, res, next) => {
     }
 
     const token = jwt.sign({
-      "subject": user.user_id,
-      "username": user.username,
-      "role_name": user.role_name
-    }, JWT_SECRET)
+      subject: user.user_id,
+      username: user.username,
+      role_name: user.role_name,
+      exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24)
+    }, JWT_SECRET )
 
     res.cookie("token", token)
 
     res.json({
-      message: `Welcome ${user.username}`,
+      message: `${user.username} is back`,
       token: token
     })
 
